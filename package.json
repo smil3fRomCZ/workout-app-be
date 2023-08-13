@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "mongoose": "^7.4.3",
+    "passport": "^0.6.0"
+  },
+  "name": "workout-app-be",
+  "description": "Small express app for tracking progress in gym",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^3.0.1"
+  },
+  "scripts": {
+    "start:dev": "nodemon server.js",
+    "start:prod": "set NODE_ENV=production&& nodemon server.js"
+  },
+  "keywords": [
+    "express",
+    "mongo",
+    "node"
+  ],
+  "author": "jan melicherik",
+  "license": "MIT"
+}
