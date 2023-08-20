@@ -1,3 +1,4 @@
+const ApiError = require("../services/errorHandler/apiErrorFormatter");
 const UserService = require("../services/user/UserService");
 
 class UserController {
@@ -22,7 +23,7 @@ class UserController {
     const userData = req.body;
     try {
       await UserService.createUser(userData);
-      res.status(200).json({ status: "success", message: "Create user" });
+      res.status(200).json({ status: "success", message: "User created" });
     } catch (error) {
       next(error);
     }
@@ -61,8 +62,15 @@ class UserController {
   }
 
   async activateUser(req, res, next) {
+    const { activation_link } = req.params;
     try {
-      res.status(200).json({ message: "Activate user" });
+      if (!activation_link) {
+        throw new ApiError("Missing activation link", 400);
+      }
+      await UserService.activateUser(activation_link);
+      res
+        .status(200)
+        .json({ status: "success", message: "User account activated" });
     } catch (error) {
       next(error);
     }

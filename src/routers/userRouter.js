@@ -11,4 +11,8 @@ userRouter
   .get(UserController.getAllUsers)
   .post(requestValidator(registrationRequest), UserController.createUser);
 
+userRouter
+  .route("/activate-account/:activation_link")
+  .get(UserController.activateUser);
+
 module.exports = userRouter;
