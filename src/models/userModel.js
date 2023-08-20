@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const { v4: uuidV4 } = require("uuid");
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -22,6 +24,7 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+    minLength: 8,
   },
   age: {
     type: Number,
@@ -37,6 +40,25 @@ const userSchema = new Schema({
   activation_link: {
     type: String,
   },
+});
+
+userSchema.pre("save", async function (next) {
+  let userData = this;
+  try {
+    if (!userData.isNew) {
+      return next();
+    }
+
+    // Generate salt
+    const salt = await bcrypt.genSalt(10);
+    // hash password
+    const hashedPassword = await bcrypt.hash(userData.password, salt);
+    userData.password = hashedPassword;
+    userData.activation_link = uuidV4();
+    return next();
+  } catch (error) {
+    return next(error);
+  }
 });
 
 const User = mongoose.model("User", userSchema);

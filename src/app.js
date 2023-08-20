@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === "developement") {
 }
 
 // Routers
-app.use("/user", userRouter);
+app.use("/api/v1/users", userRouter);
 
 // Error handling
 // Handle unknown routes
