@@ -1,18 +1,26 @@
 const ApiError = require("../services/errorHandler/apiErrorFormatter");
 const UserService = require("../services/user/UserService");
+const mongoose = require("mongoose");
 
 class UserController {
   async getAllUsers(req, res, next) {
     try {
-      res.status(200).json({ records: 0, data: "Get all users" });
+      const users = await UserService.getAllUsers();
+      res.status(200).json({ records: users.length, data: users });
     } catch (error) {
       next(error);
     }
   }
 
   async getUserByID(req, res, next) {
+    const { userId } = req.params;
+
     try {
-      res.status(200).json({ message: "Get user by ID" });
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new ApiError("Cast to ObjectId failed", 400);
+      }
+      const user = await UserService.getUserByID(userId);
+      res.status(200).json({ status: "success", message: user });
     } catch (error) {
       next(error);
     }

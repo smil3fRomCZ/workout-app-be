@@ -15,4 +15,6 @@ userRouter
   .route("/activate-account/:activation_link")
   .get(UserController.activateUser);
 
+userRouter.route("/:userId").get(UserController.getUserByID);
+
 module.exports = userRouter;
