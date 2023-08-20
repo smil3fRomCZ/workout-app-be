@@ -1,3 +1,5 @@
+const UserService = require("../services/user/UserService");
+
 class UserController {
   async getAllUsers(req, res, next) {
     try {
@@ -15,9 +17,12 @@ class UserController {
     }
   }
 
+  // Register new user
   async createUser(req, res, next) {
+    const userData = req.body;
     try {
-      res.status(200).json({ message: "Create user" });
+      await UserService.createUser(userData);
+      res.status(200).json({ status: "success", message: "Create user" });
     } catch (error) {
       next(error);
     }
@@ -57,11 +62,11 @@ class UserController {
 
   async activateUser(req, res, next) {
     try {
-      res.status(200).json({ message: "Activate user                     " });
+      res.status(200).json({ message: "Activate user" });
     } catch (error) {
       next(error);
     }
   }
 }
 
-module.exports = UserController;
+module.exports = new UserController();
