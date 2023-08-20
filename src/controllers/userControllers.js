@@ -3,6 +3,8 @@ const UserService = require("../services/user/UserService");
 const mongoose = require("mongoose");
 
 class UserController {
+
+  // Get all users where is_active = true
   async getAllUsers(req, res, next) {
     try {
       const users = await UserService.getAllUsers();
@@ -12,6 +14,7 @@ class UserController {
     }
   }
 
+  // Get user by object _id
   async getUserByID(req, res, next) {
     const { userId } = req.params;
 
