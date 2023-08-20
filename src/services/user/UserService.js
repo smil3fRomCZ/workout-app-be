@@ -3,8 +3,33 @@ const { sendRegistrationEmail } = require("../email/emailhandler");
 const ApiError = require("../errorHandler/apiErrorFormatter");
 
 class UserService {
-  static async getAllUser() {}
-  static async getUserByID() {}
+  static USER_PROJECTION = [
+    "nick_name",
+    "email",
+    "first_name",
+    "last_name",
+    "age",
+  ];
+  // Get all users where is_active = true
+  static async getAllUsers() {
+    try {
+      return await User.find(
+        { is_active: { $eq: true } },
+        this.USER_PROJECTION
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Get user by _id
+  static async getUserByID(userId) {
+    try {
+      return await User.findById(userId, this.USER_PROJECTION);
+    } catch (error) {
+      throw error;
+    }
+  }
 
   /*
   Create new user registration from input form
