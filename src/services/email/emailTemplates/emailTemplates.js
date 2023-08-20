@@ -7,7 +7,7 @@ module.exports = {
       html: `
       <div>
             <p>Pls confirm your account</p>
-            <a href="#${activationLink}">Confirm account</a>
+            <a href="http://localhost:3000/api/v1/users/activate-account/${activationLink}">Confirm account</a>
       </div>
       `,
     };
