@@ -26,6 +26,8 @@ userRouter
     UserController.loginUser
   );
 
+userRouter.route("/logout-user").get(UserController.logoutUser);
+
 userRouter
   .route("/account")
   .get(checkJwtAuthorization, UserController.getUserAccount);

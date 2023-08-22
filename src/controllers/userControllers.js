@@ -73,7 +73,14 @@ class UserController {
 
   async logoutUser(req, res, next) {
     try {
-      res.status(200).json({ message: "Logout user" });
+      if (req.cookies.jwt) {
+        res.cookie("jwt", "", { maxAge: 1 });
+        res
+          .status(200)
+          .json({ status: "success", message: "User logout successfully" });
+      } else {
+        res.status(200).json({ message: "You are already logged out" });
+      }
     } catch (error) {
       next(error);
     }
@@ -87,10 +94,16 @@ class UserController {
         throw new ApiError("Cast to ObjectId failed", 400);
       }
 
-      await UserService.updateUser(userId, userUpdateData);
-      res
-        .status(200)
-        .json({ status: "success", data: "User updated successfully" });
+      const updateResult = await UserService.updateUser(userId, userUpdateData);
+      if (updateResult > 0) {
+        res
+          .status(200)
+          .json({ status: "success", data: "User updated successfully" });
+      } else {
+        res
+          .status(400)
+          .json({ status: "failed", message: "Nothing to update here" });
+      }
     } catch (error) {
       next(error);
     }
@@ -103,8 +116,12 @@ class UserController {
         throw new ApiError("Cast to ObjectId failed", 400);
       }
 
-      await UserService.deleteUser(userId);
-      res.status(203).json({ message: "User deleted" });
+      const result = await UserService.deleteUser(userId);
+      if (result.deletedCount === 0) {
+        res.status(400).json({ status: "failed", message: "Bad request" });
+      } else {
+        res.status(203).json({ message: "User deleted" });
+      }
     } catch (error) {
       next(error);
     }
