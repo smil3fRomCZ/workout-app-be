@@ -29,6 +29,11 @@ class UserController {
         throw new ApiError("Cast to ObjectId failed", 400);
       }
       const user = await UserService.getUserByID(userId);
+      if (!user) {
+        return res
+          .status(404)
+          .json({ status: "failed", message: "No user found" });
+      }
       res.status(200).json({ status: "success", message: user });
     } catch (error) {
       next(error);
@@ -68,7 +73,7 @@ class UserController {
 
   async logoutUser(req, res, next) {
     try {
-      res.status(200).json({ message: "Create user" });
+      res.status(200).json({ message: "Logout user" });
     } catch (error) {
       next(error);
     }
@@ -81,6 +86,7 @@ class UserController {
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         throw new ApiError("Cast to ObjectId failed", 400);
       }
+
       await UserService.updateUser(userId, userUpdateData);
       res
         .status(200)
@@ -92,7 +98,13 @@ class UserController {
 
   async deleteUser(req, res, next) {
     try {
-      res.status(200).json({ message: "Delete user" });
+      const { userId } = req.params;
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new ApiError("Cast to ObjectId failed", 400);
+      }
+
+      await UserService.deleteUser(userId);
+      res.status(203).json({ message: "User deleted" });
     } catch (error) {
       next(error);
     }

@@ -37,6 +37,7 @@ userRouter
     checkJwtAuthorization,
     requestValidator(requestTemplate.updateRequest),
     UserController.updateUser
-  );
+  )
+  .delete(checkJwtAuthorization, UserController.deleteUser);
 
 module.exports = userRouter;

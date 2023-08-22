@@ -72,7 +72,11 @@ class UserService {
     }
   }
 
-  static async deleteUser() {}
+  static async deleteUser(userId) {
+    try {
+      return await User.deleteOne({ _id: userId });
+    } catch (error) {}
+  }
 
   /*
   Check if activation_link is correct and activate user account
