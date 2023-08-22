@@ -62,11 +62,12 @@ class UserService {
     }
   }
 
-  static async logoutUser() {}
-
   static async updateUser(userId, userUpdateData) {
     try {
-      await User.findOne({ _id: userId }).updateOne(userUpdateData);
+      const updateResult = await User.findOne({ _id: userId }).updateOne(
+        userUpdateData
+      );
+      return updateResult.modifiedCount;
     } catch (error) {
       throw error;
     }
@@ -75,7 +76,9 @@ class UserService {
   static async deleteUser(userId) {
     try {
       return await User.deleteOne({ _id: userId });
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 
   /*
