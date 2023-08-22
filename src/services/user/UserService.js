@@ -63,7 +63,15 @@ class UserService {
   }
 
   static async logoutUser() {}
-  static async updateUser() {}
+
+  static async updateUser(userId, userUpdateData) {
+    try {
+      await User.findOne({ _id: userId }).updateOne(userUpdateData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async deleteUser() {}
 
   /*

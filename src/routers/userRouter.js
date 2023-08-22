@@ -30,6 +30,13 @@ userRouter
   .route("/account")
   .get(checkJwtAuthorization, UserController.getUserAccount);
 
-userRouter.route("/:userId").get(UserController.getUserByID);
+userRouter
+  .route("/:userId")
+  .get(UserController.getUserByID)
+  .patch(
+    checkJwtAuthorization,
+    requestValidator(requestTemplate.updateRequest),
+    UserController.updateUser
+  );
 
 module.exports = userRouter;

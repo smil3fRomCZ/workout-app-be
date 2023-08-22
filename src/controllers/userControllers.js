@@ -76,7 +76,15 @@ class UserController {
 
   async updateUser(req, res, next) {
     try {
-      res.status(200).json({ message: "Update user" });
+      const { userId } = req.params;
+      const userUpdateData = req.body;
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new ApiError("Cast to ObjectId failed", 400);
+      }
+      await UserService.updateUser(userId, userUpdateData);
+      res
+        .status(200)
+        .json({ status: "success", data: "User updated successfully" });
     } catch (error) {
       next(error);
     }
