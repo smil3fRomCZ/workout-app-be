@@ -1,7 +1,7 @@
 const sendgrid = require("@sendgrid/mail");
 
 const { SENDGRID_API_KEY } = require("../../config/configuration");
-const ApiError = require("../errorHandler/apiErrorFormatter");
+const ApiError = require("../error/apiErrorFormatter");
 const { createRegistrationEmail } = require("./emailTemplates");
 
 sendgrid.setApiKey(SENDGRID_API_KEY);

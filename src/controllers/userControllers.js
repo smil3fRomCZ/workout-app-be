@@ -1,9 +1,15 @@
-const ApiError = require("../services/errorHandler/apiErrorFormatter");
-const UserService = require("../services/user/UserService");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+
+const ApiError = require("../services/error/apiErrorFormatter");
+const UserService = require("../services/user/UserService");
+const {
+  JWT_SECRET,
+  JWT_MAXAGE,
+  JWT_MAXAGE_MS,
+} = require("../config/configuration");
 
 class UserController {
-
   // Get all users where is_active = true
   async getAllUsers(req, res, next) {
     try {
@@ -42,7 +48,19 @@ class UserController {
 
   async loginUser(req, res, next) {
     try {
-      res.status(200).json({ message: "Create user" });
+      const { email, password } = req.body;
+      const user = await UserService.loginUser(email, password);
+      if (!user) {
+        return res
+          .status(400)
+          .json({ status: "failed", message: "Wrong credentials" });
+      }
+      const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_MAXAGE });
+      res.cookie("jwt", token, {
+        expiresIn: JWT_MAXAGE_MS,
+        httpOnly: true,
+      });
+      res.status(200).json({ status: "success", message: "Login user" });
     } catch (error) {
       next(error);
     }
@@ -82,6 +100,14 @@ class UserController {
       res
         .status(200)
         .json({ status: "success", message: "User account activated" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getUserAccount(req, res, next) {
+    try {
+      res.status(200).json({ status: "success", message: "Account" });
     } catch (error) {
       next(error);
     }
