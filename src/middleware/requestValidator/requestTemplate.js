@@ -10,4 +10,10 @@ module.exports = {
     email: yup.string().email().trim().required(),
     password: yup.string().min(8).trim().required(),
   }),
+  updateRequest: yup.object().shape({
+    email: yup.string().email(),
+    first_name: yup.string(),
+    last_name: yup.string(),
+    age: yup.number(),
+  }),
 };

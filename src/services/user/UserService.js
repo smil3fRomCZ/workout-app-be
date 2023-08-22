@@ -63,8 +63,20 @@ class UserService {
   }
 
   static async logoutUser() {}
-  static async updateUser() {}
-  static async deleteUser() {}
+
+  static async updateUser(userId, userUpdateData) {
+    try {
+      await User.findOne({ _id: userId }).updateOne(userUpdateData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteUser(userId) {
+    try {
+      return await User.deleteOne({ _id: userId });
+    } catch (error) {}
+  }
 
   /*
   Check if activation_link is correct and activate user account
