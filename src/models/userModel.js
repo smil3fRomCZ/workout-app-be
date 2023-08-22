@@ -45,6 +45,7 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+// Before save to DB, hash password(for new users) and generate activation_link
 userSchema.pre("save", async function (next) {
   let userData = this;
   try {
@@ -52,7 +53,6 @@ userSchema.pre("save", async function (next) {
       return next();
     }
 
-    console.log("Hash password");
     // Generate salt
     const salt = await bcrypt.genSalt(10);
     // hash password
@@ -64,6 +64,14 @@ userSchema.pre("save", async function (next) {
     return next(error);
   }
 });
+
+// Compare user provide password and stored one in DB
+userSchema.methods.isPasswordValid = async function (
+  userInputPassword,
+  userStoredPassword
+) {
+  return await bcrypt.compare(userInputPassword, userStoredPassword);
+};
 
 const User = mongoose.model("User", userSchema);
 

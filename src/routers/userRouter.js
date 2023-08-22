@@ -1,19 +1,34 @@
 const userRouter = require("express").Router();
 
-const requestValidator = require("../services/requestValidator/requestValidator");
-const {
-  registrationRequest,
-} = require("../services/requestValidator/requestTemplate");
+const requestValidator = require("../middleware/requestValidator/requestValidator");
+const requestTemplate = require("../middleware/requestValidator/requestTemplate");
 const UserController = require("../controllers/userControllers");
+const {
+  checkJwtAuthorization,
+} = require("../middleware/checkJwtAuthorization/checkJwtAuthorization");
 
 userRouter
   .route("/")
   .get(UserController.getAllUsers)
-  .post(requestValidator(registrationRequest), UserController.createUser);
+  .post(
+    requestValidator(requestTemplate.registrationRequest),
+    UserController.createUser
+  );
 
 userRouter
   .route("/activate-account/:activation_link")
   .get(UserController.activateUser);
+
+userRouter
+  .route("/login-user")
+  .post(
+    requestValidator(requestTemplate.loginRequest),
+    UserController.loginUser
+  );
+
+userRouter
+  .route("/account")
+  .get(checkJwtAuthorization, UserController.getUserAccount);
 
 userRouter.route("/:userId").get(UserController.getUserByID);
 

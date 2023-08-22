@@ -6,4 +6,8 @@ module.exports = {
     email: yup.string().email().trim().required(),
     password: yup.string().required().min(8).trim(),
   }),
+  loginRequest: yup.object().shape({
+    email: yup.string().email().trim().required(),
+    password: yup.string().min(8).trim().required(),
+  }),
 };

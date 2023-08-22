@@ -1,4 +1,4 @@
-const ApiError = require("../errorHandler/apiErrorFormatter");
+const ApiError = require("../../services/error/apiErrorFormatter");
 
 module.exports = (schema) => {
   return async (req, res, next) => {

@@ -1,6 +1,6 @@
 const User = require("../../models/userModel");
 const { sendRegistrationEmail } = require("../email/emailhandler");
-const ApiError = require("../errorHandler/apiErrorFormatter");
+const ApiError = require("../error/apiErrorFormatter");
 
 class UserService {
   static USER_PROJECTION = [
@@ -47,7 +47,21 @@ class UserService {
     }
   }
 
-  static async loginUser() {}
+  static async loginUser(email, userInputPassword) {
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new ApiError("No user found!", 404);
+      }
+      if (!(await user.isPasswordValid(userInputPassword, user.password))) {
+        return "";
+      }
+      return user._id;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async logoutUser() {}
   static async updateUser() {}
   static async deleteUser() {}
