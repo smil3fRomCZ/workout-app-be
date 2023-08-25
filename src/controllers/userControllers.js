@@ -3,12 +3,8 @@ const jwt = require("jsonwebtoken");
 
 const ApiError = require("../services/error/apiErrorFormatter");
 const UserService = require("../services/user/UserService");
-const {
-  JWT_SECRET,
-  JWT_MAXAGE,
-  JWT_MAXAGE_MS,
-} = require("../config/configuration");
-
+const { JWT_MAXAGE_MS } = require("../config/configuration");
+const { createToken } = require("../services/jwt/createToken");
 class UserController {
   // Get all users where is_active = true
   async getAllUsers(req, res, next) {
@@ -60,7 +56,7 @@ class UserController {
           .status(400)
           .json({ status: "failed", message: "Wrong credentials" });
       }
-      const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_MAXAGE });
+      const token = createToken(user);
       res.cookie("jwt", token, {
         expiresIn: JWT_MAXAGE_MS,
         httpOnly: true,
