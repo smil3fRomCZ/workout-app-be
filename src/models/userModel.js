@@ -20,15 +20,17 @@ const userSchema = new Schema(
     email: {
       type: String,
       unique: true,
-      required: true,
     },
     password: {
       type: String,
-      required: true,
       minLength: 8,
     },
     age: {
       type: Number,
+    },
+    googleId: {
+      type: String,
+      unique: true,
     },
     is_active: {
       type: Boolean,
@@ -55,9 +57,12 @@ userSchema.pre("save", async function (next) {
 
     // Generate salt
     const salt = await bcrypt.genSalt(10);
-    // hash password
-    const hashedPassword = await bcrypt.hash(userData.password, salt);
-    userData.password = hashedPassword;
+    // hash password before save to DB
+    // If user come from 3rd party service skip pw procedure
+    if (!userData.googleId) {
+      const hashedPassword = await bcrypt.hash(userData.password, salt);
+      userData.password = hashedPassword;
+    }
     userData.activation_link = uuidV4();
     return next();
   } catch (error) {
