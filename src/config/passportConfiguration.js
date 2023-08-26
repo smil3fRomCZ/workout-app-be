@@ -2,12 +2,13 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 const { oauth: oauthConfiguration } = require("../config/configuration");
+const User = require("../models/userModel");
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  done(null, user._id);
 });
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
@@ -18,10 +19,22 @@ passport.use(
       clientSecret: oauthConfiguration.GOOGLE_CLIENT_SECRET,
       callbackURL: oauthConfiguration.GOOGLE_CALLBACK_URL,
     },
-    function (accessToken, refreshToken, profile, done) {
-      console.log("Start of auth...");
-      console.log(profile);
-      done(null, profile);
+    async function (accessToken, refreshToken, profile, done) {
+      const currentUser = await User.findOne({ googleId: profile.id });
+
+      if (currentUser) {
+        return done(null, currentUser);
+      }
+      const newUser = await User.create({
+        email: profile.emails[0].value,
+        googleId: profile.id,
+        nick_name: profile.displayName,
+        first_name: profile.name.givenName,
+        last_name: profile.name.familyName,
+      });
+      await newUser.save();
+      console.log({ newUser });
+      done(null, newUser);
     }
   )
 );

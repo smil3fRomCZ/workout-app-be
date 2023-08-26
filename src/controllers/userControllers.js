@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 
 const ApiError = require("../services/error/apiErrorFormatter");
 const UserService = require("../services/user/UserService");
-const { JWT_MAXAGE_MS } = require("../config/configuration");
-const { createToken } = require("../services/jwt/createToken");
+
 class UserController {
   // Get all users where is_active = true
   async getAllUsers(req, res, next) {
@@ -56,11 +54,7 @@ class UserController {
           .status(400)
           .json({ status: "failed", message: "Wrong credentials" });
       }
-      const token = createToken(user);
-      res.cookie("jwt", token, {
-        expiresIn: JWT_MAXAGE_MS,
-        httpOnly: true,
-      });
+      req.session.userId = user._id;
       res.status(200).json({ status: "success", message: "Login user" });
     } catch (error) {
       next(error);
@@ -69,14 +63,9 @@ class UserController {
 
   async logoutUser(req, res, next) {
     try {
-      if (req.cookies.jwt) {
-        res.cookie("jwt", "", { maxAge: 1 });
-        res
-          .status(200)
-          .json({ status: "success", message: "User logout successfully" });
-      } else {
-        res.status(200).json({ message: "You are already logged out" });
-      }
+      req.session.destroy();
+      res.clearCookie("connect.sid");
+      res.send("Logged out");
     } catch (error) {
       next(error);
     }
@@ -138,6 +127,7 @@ class UserController {
     }
   }
 
+  // TODO:Test purpose for authorization - delete before release
   async getUserAccount(req, res, next) {
     try {
       res.status(200).json({ status: "success", message: "Account" });
