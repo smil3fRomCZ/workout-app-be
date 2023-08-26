@@ -33,7 +33,6 @@ passport.use(
         last_name: profile.name.familyName,
       });
       await newUser.save();
-      console.log({ newUser });
       done(null, newUser);
     }
   )
