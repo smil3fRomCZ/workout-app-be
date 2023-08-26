@@ -12,9 +12,10 @@ const errorhandler = require("./services/error/errorHandler");
 const ApiError = require("./services/error/apiErrorFormatter");
 const authGoogleRouter = require("./routers/authGoogleRouter");
 const userRouter = require("./routers/userRouter");
+const { sessionOptions } = require("./config/sessionConfiguration");
 
 const app = express();
-app.use(session({ secret: "test", saveUninitialized: false, resave: false }));
+app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 
