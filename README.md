@@ -17,7 +17,7 @@ Small express app for tracking progress in gym
 Just run simple command
 `npm i workout-app-be`
 
-==Don't forget to set your .env file==
+Don't forget to set your .env file
 
 ```env
 #SERVER
