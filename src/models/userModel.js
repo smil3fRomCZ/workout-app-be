@@ -43,6 +43,11 @@ const userSchema = new Schema(
     activation_link: {
       type: String,
     },
+    user_type: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
   { timestamps: true }
 );
