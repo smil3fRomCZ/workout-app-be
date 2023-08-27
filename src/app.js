@@ -12,6 +12,7 @@ const errorhandler = require("./services/error/errorHandler");
 const ApiError = require("./services/error/apiErrorFormatter");
 const authGoogleRouter = require("./routers/authGoogleRouter");
 const userRouter = require("./routers/userRouter");
+const exerciseRouter = require("./routers/exerciseRouter");
 const { sessionOptions } = require("./config/sessionConfiguration");
 
 const app = express();
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV === "developement") {
 // Routers
 app.use("/api/v1/auth", authGoogleRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/exercises", exerciseRouter);
 
 // Error handling
 // Handle unknown routes

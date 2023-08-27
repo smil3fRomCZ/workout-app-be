@@ -3,6 +3,7 @@ const { sendRegistrationEmail } = require("../email/emailhandler");
 const ApiError = require("../error/apiErrorFormatter");
 
 class UserService {
+  // List of fields, which will be return
   static USER_PROJECTION = [
     "nick_name",
     "email",

@@ -16,4 +16,9 @@ module.exports = {
     last_name: yup.string(),
     age: yup.number(),
   }),
+  createExercise: yup.object().shape({
+    exercise_series: yup.number().required(),
+    exercise_repetions: yup.array().of(yup.number()).required(),
+    exercise_weight: yup.array().of(yup.number()).required(),
+  }),
 };

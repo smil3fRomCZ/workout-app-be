@@ -8,7 +8,7 @@ class UserController {
   async getAllUsers(req, res, next) {
     try {
       const users = await UserService.getAllUsers();
-      res.status(200).json({ records: users.length, data: users });
+      res.status(200).json({ number_of_records: users.length, data: users });
     } catch (error) {
       next(error);
     }
