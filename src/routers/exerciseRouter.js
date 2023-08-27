@@ -12,4 +12,11 @@ exerciseRouter
     exerciseController.createExercise
   );
 
+exerciseRouter
+  .route("/templates")
+  .post(exerciseController.createExerciseTemplate)
+  .get(exerciseController.getAllExerciseTemplates);
+
+exerciseRouter.route("/:exerciseId").get(exerciseController.getExerciseByID);
+
 module.exports = exerciseRouter;

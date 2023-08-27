@@ -7,9 +7,7 @@ const exerciseSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    exercise_type: {
-      type: String,
-    },
+    exercise: { type: Schema.Types.ObjectId, ref: "Exercise_Template" },
     exercise_series: {
       type: Number,
       required: true,
