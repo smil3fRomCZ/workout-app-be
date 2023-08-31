@@ -1,15 +1,11 @@
 const Exercise = require("../../models/exerciseModel");
-const ExerciseTemplate = require("../../models/exerciseTemplateModel");
 
 class ExerciseService {
   static userPopulateProjection = ["_id", "nick_name", "age"];
-  static exerciseTemplatePopulateProjection = [
-    "exercise_name",
-    "exercise_body_part",
-  ];
   static exerciseProjection = [
     "_id",
-    "exercise",
+    "exercise_name",
+    "exercise_body_part",
     "exercise_series",
     "exercise_repetions",
     "exercise_weight",
@@ -17,18 +13,11 @@ class ExerciseService {
 
   static async getAllExercises() {
     try {
-      const exercises = await Exercise.find()
-        .populate("user_id", this.userPopulateFields)
-        .populate("exercise", this.exerciseTemplatePopulateFields);
+      const exercises = await Exercise.find().populate(
+        "user_id",
+        this.userPopulateProjection
+      );
       return exercises;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async getAllExerciseTemplates() {
-    try {
-      return await ExerciseTemplate.find();
     } catch (error) {
       throw error;
     }
@@ -39,7 +28,7 @@ class ExerciseService {
       const exercise = await Exercise.findById(
         exerciseId,
         this.exerciseProjection
-      ).populate("exercise", this.exerciseTemplatePopulateProjection);
+      );
       return exercise;
     } catch (error) {
       throw error;
@@ -49,14 +38,6 @@ class ExerciseService {
   static async createExercise(exerciseInputData) {
     try {
       await Exercise.create(exerciseInputData);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async createExerciseTemplate(exerciseInputData) {
-    try {
-      await ExerciseTemplate.create(exerciseInputData);
     } catch (error) {
       throw error;
     }
