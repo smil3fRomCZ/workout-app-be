@@ -1,4 +1,3 @@
-const Exercise = require("../models/exerciseModel");
 const ExerciseService = require("../services/exercise/ExerciseService");
 const ApiError = require("../services/error/apiErrorFormatter");
 const { default: mongoose } = require("mongoose");
@@ -10,18 +9,6 @@ class ExerciseController {
       res
         .status(200)
         .json({ number_of_records: exercises.length, data: exercises });
-    } catch (error) {
-      next(new ApiError(error.message, error.statusCode));
-    }
-  }
-
-  async getAllExerciseTemplates(req, res, next) {
-    try {
-      const exerciseTemplates = await ExerciseService.getAllExerciseTemplates();
-      res.status(200).json({
-        number_of_records: exerciseTemplates.length,
-        data: exerciseTemplates,
-      });
     } catch (error) {
       next(new ApiError(error.message, error.statusCode));
     }
@@ -47,18 +34,6 @@ class ExerciseController {
       res
         .status(200)
         .json({ status: "success", message: "Exercise created successfully" });
-    } catch (error) {
-      next(new ApiError(error.message, error.statusCode));
-    }
-  }
-
-  async createExerciseTemplate(req, res, next) {
-    try {
-      const exerciseData = req.body;
-      await ExerciseService.createExerciseTemplate(exerciseData);
-      res
-        .status(200)
-        .json({ status: "success", message: "New exercise template created" });
     } catch (error) {
       next(new ApiError(error.message, error.statusCode));
     }

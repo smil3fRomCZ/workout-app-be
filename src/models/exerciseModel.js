@@ -7,7 +7,25 @@ const exerciseSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    exercise: { type: Schema.Types.ObjectId, ref: "Exercise_Template" },
+    exercise_name: {
+      type: String,
+    },
+    exercise_body_part: {
+      type: String,
+      enum: [
+        "Biceps",
+        "Břišní svaly",
+        "Hýždě",
+        "Lýtka",
+        "Prsní svaly",
+        "Ramena",
+        "Spodní část těla",
+        "Stehna",
+        "Triceps",
+        "Vrchní část těla",
+        "Zádové svaly",
+      ],
+    },
     exercise_series: {
       type: Number,
       required: true,
