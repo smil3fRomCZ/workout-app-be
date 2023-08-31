@@ -42,6 +42,14 @@ class ExerciseService {
       throw error;
     }
   }
+
+  static async deleteExercise(exerciseId) {
+    try {
+      await Exercise.deleteOne({ _id: exerciseId });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = ExerciseService;

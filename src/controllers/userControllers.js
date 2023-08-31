@@ -65,7 +65,7 @@ class UserController {
     try {
       req.session.destroy();
       res.clearCookie("connect.sid");
-      res.send("Logged out");
+      res.status(203).json({ status: "success", message: "User logged out" });
     } catch (error) {
       next(error);
     }

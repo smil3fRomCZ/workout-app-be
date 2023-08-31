@@ -38,6 +38,22 @@ class ExerciseController {
       next(new ApiError(error.message, error.statusCode));
     }
   }
+
+  async deleteExercise(req, res, next) {
+    try {
+      // TODO: Exercise service
+    } catch (error) {
+      next(new ApiError(error.message, error.statusCode));
+    }
+  }
+
+  async updateExercise(req, res, next) {
+    try {
+      // TODO: Exercise service
+    } catch (error) {
+      next(new ApiError(error.message, error.statusCode));
+    }
+  }
 }
 
 module.exports = new ExerciseController();
