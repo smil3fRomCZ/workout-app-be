@@ -52,7 +52,11 @@ class ExerciseController {
 
   async updateExercise(req, res, next) {
     try {
-      // TODO: Exercise service
+      const { exerciseId } = req.params;
+      const userId = req.session.userId;
+      const newData = req.body;
+      await ExerciseService.updateExercise(exerciseId, userId, newData);
+      res.status(200).json({ status: "success", message: "Exercise updated" });
     } catch (error) {
       next(new ApiError(error.message, error.statusCode));
     }

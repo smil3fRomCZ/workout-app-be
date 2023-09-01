@@ -45,6 +45,21 @@ class ExerciseService {
     }
   }
 
+  static async updateExercise(exerciseId, userId, newData) {
+    try {
+      const exercise = await Exercise.findById(exerciseId);
+      if (exercise.user_id._id.toString() !== userId) {
+        throw new ApiError(
+          "You are not authorized to update this exercise. Pls contact administrator",
+          403
+        );
+      }
+      await exercise.updateOne(newData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async deleteExercise(exerciseId, userId) {
     try {
       const exercise = await Exercise.findById(exerciseId);
