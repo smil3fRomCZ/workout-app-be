@@ -38,6 +38,29 @@ class ExerciseController {
       next(new ApiError(error.message, error.statusCode));
     }
   }
+
+  async deleteExercise(req, res, next) {
+    try {
+      const { exerciseId } = req.params;
+      const userId = req.session.userId;
+      await ExerciseService.deleteExercise(exerciseId, userId);
+      res.status(200).json({ status: "success", message: "Exercise deleted" });
+    } catch (error) {
+      next(new ApiError(error.message, error.statusCode));
+    }
+  }
+
+  async updateExercise(req, res, next) {
+    try {
+      const { exerciseId } = req.params;
+      const userId = req.session.userId;
+      const newData = req.body;
+      await ExerciseService.updateExercise(exerciseId, userId, newData);
+      res.status(200).json({ status: "success", message: "Exercise updated" });
+    } catch (error) {
+      next(new ApiError(error.message, error.statusCode));
+    }
+  }
 }
 
 module.exports = new ExerciseController();

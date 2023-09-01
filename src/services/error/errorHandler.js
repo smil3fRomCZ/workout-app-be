@@ -1,5 +1,11 @@
 const ApiError = require("./apiErrorFormatter");
 
+// List of methods for production
+const duplicateKeyErrorDB = (error) => {
+  const message = `Duplicate field value. Pls use different value`;
+  return new ApiError(message, 400);
+};
+
 const sendDevelopementError = (err, req, res) => {
   // API Errors
   if (req.originalUrl.startsWith("/api")) {
@@ -39,10 +45,12 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || "internal error";
 
   if (process.env.NODE_ENV === "developement") {
-    // console.log(`ENV: ${process.env.NODE_ENV}`);
-    // console.log(`ERR: ${err}`);
     sendDevelopementError(err, req, res);
   } else if (process.env.NODE_ENV === "production") {
-    sendProductionError(err, req, res);
+    let error = { ...err };
+    error.message = err.message;
+
+    if (error.code === 11000) error = duplicateKeyErrorDB(error);
+    sendProductionError(error, req, res);
   }
 };

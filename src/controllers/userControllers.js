@@ -65,7 +65,7 @@ class UserController {
     try {
       req.session.destroy();
       res.clearCookie("connect.sid");
-      res.send("Logged out");
+      res.status(203).json({ status: "success", message: "User logged out" });
     } catch (error) {
       next(error);
     }
@@ -78,6 +78,8 @@ class UserController {
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         throw new ApiError("Cast to ObjectId failed", 400);
       }
+      if (req.session.userId !== userId)
+        throw new ApiError("You dont have a permission to do that!", 401);
 
       const updateResult = await UserService.updateUser(userId, userUpdateData);
       if (updateResult > 0) {
@@ -100,7 +102,8 @@ class UserController {
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         throw new ApiError("Cast to ObjectId failed", 400);
       }
-
+      if (req.session.userId !== userId)
+        throw new ApiError("You dont have a permission to do that!", 401);
       const result = await UserService.deleteUser(userId);
       if (result.deletedCount === 0) {
         res.status(400).json({ status: "failed", message: "Bad request" });
