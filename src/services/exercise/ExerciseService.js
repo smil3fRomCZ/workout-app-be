@@ -1,9 +1,11 @@
 const Exercise = require("../../models/exerciseModel");
+const ApiError = require("../error/apiErrorFormatter");
 
 class ExerciseService {
   static userPopulateProjection = ["_id", "nick_name", "age"];
   static exerciseProjection = [
     "_id",
+    "user_id",
     "exercise_name",
     "exercise_body_part",
     "exercise_series",
@@ -43,9 +45,17 @@ class ExerciseService {
     }
   }
 
-  static async deleteExercise(exerciseId) {
+  static async deleteExercise(exerciseId, userId) {
     try {
-      await Exercise.deleteOne({ _id: exerciseId });
+      const exercise = await Exercise.findById(exerciseId);
+      // Check if id within exercise is same like id from user who sent request
+      if (exercise.user_id._id.toString() !== userId) {
+        throw new ApiError(
+          "You are not authorized to delete this exercise. Pls contact administrator",
+          403
+        );
+      }
+      await exercise.deleteOne();
     } catch (error) {
       throw error;
     }

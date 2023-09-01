@@ -41,7 +41,10 @@ class ExerciseController {
 
   async deleteExercise(req, res, next) {
     try {
-      // TODO: Exercise service
+      const { exerciseId } = req.params;
+      const userId = req.session.userId;
+      await ExerciseService.deleteExercise(exerciseId, userId);
+      res.status(200).json({ status: "success", message: "Exercise deleted" });
     } catch (error) {
       next(new ApiError(error.message, error.statusCode));
     }

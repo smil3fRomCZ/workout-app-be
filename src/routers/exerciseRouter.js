@@ -17,6 +17,6 @@ exerciseRouter
 exerciseRouter
   .route("/:exerciseId")
   .get(exerciseController.getExerciseByID)
-  .delete(exerciseController.deleteExercise);
+  .delete(userSessionCheck, exerciseController.deleteExercise);
 
 module.exports = exerciseRouter;
