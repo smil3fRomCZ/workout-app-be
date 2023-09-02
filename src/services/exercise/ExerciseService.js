@@ -1,4 +1,5 @@
 const Exercise = require("../../models/exerciseModel");
+const Workout = require("../../models/workoutModel");
 const ApiError = require("../error/apiErrorFormatter");
 
 class ExerciseService {
@@ -63,14 +64,33 @@ class ExerciseService {
   static async deleteExercise(exerciseId, userId) {
     try {
       const exercise = await Exercise.findById(exerciseId);
+      if (!exercise) {
+        throw new ApiError("No such exercise to delete", 400);
+      }
       // Check if id within exercise is same like id from user who sent request
-      if (exercise.user_id._id.toString() !== userId) {
+      if (exercise?.user_id._id.toString() !== userId) {
         throw new ApiError(
           "You are not authorized to delete this exercise. Pls contact administrator",
           403
         );
       }
-      await exercise.deleteOne();
+      // Check if exercise if also in workout collection, if not than remove only exercise
+      const workouts = await Workout.findOne({ user_data: userId });
+      if (!workouts) {
+        return await exercise.deleteOne();
+      }
+
+      for (let i = 0; i < workouts.exercises.length; i++) {
+        if (workouts.exercises[i]._id.toString() === exerciseId) {
+          let indexToDelete = workouts.exercises.findIndex(
+            (element) => element._id === exerciseId
+          );
+          // TODO: When FE wil be connected check if INDEX work correct
+          workouts.exercises.splice(indexToDelete, 1);
+          await workouts.save();
+          await exercise.deleteOne();
+        }
+      }
     } catch (error) {
       throw error;
     }

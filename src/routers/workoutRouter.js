@@ -8,4 +8,10 @@ workoutRouter
   .get(workoutController.getAllWorkouts)
   .post(userSessionCheck, workoutController.createWorkout);
 
+workoutRouter
+  .route("/:workoutId/add-exercise")
+  .post(userSessionCheck, workoutController.addExerciseToWorkout);
+
+workoutRouter.route("/:workoutId").get(workoutController.getWorkoutByID);
+
 module.exports = workoutRouter;
