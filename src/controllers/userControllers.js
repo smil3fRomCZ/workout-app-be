@@ -108,7 +108,9 @@ class UserController {
       if (result.deletedCount === 0) {
         res.status(400).json({ status: "failed", message: "Bad request" });
       } else {
-        res.status(203).json({ message: "User deleted" });
+        req.session.destroy();
+        res.clearCookie("connect.sid");
+        res.status(203).json({ status: "success", message: "User deleted" });
       }
     } catch (error) {
       next(error);

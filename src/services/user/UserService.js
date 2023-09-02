@@ -1,4 +1,6 @@
 const User = require("../../models/userModel");
+const Exercise = require("../../models/exerciseModel");
+const Workout = require("../../models/workoutModel");
 const { sendRegistrationEmail } = require("../email/emailhandler");
 const ApiError = require("../error/apiErrorFormatter");
 
@@ -76,7 +78,14 @@ class UserService {
 
   static async deleteUser(userId) {
     try {
-      return await User.deleteOne({ _id: userId });
+      const exercise = await Exercise.findOne({ user_id: userId });
+      if (!exercise) return await User.deleteOne({ _id: userId });
+      if (exercise) {
+        const workout = await Workout.findOne({ user_data: userId });
+        await exercise.deleteOne();
+        await workout.deleteOne();
+        return await User.deleteOne({ _id: userId });
+      }
     } catch (error) {
       throw error;
     }

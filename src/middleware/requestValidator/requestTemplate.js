@@ -21,8 +21,4 @@ module.exports = {
     exercise_repetions: yup.array().of(yup.number()).required(),
     exercise_weight: yup.array().of(yup.number()).required(),
   }),
-  createExerciseTemplate: yup.object().shape({
-    exercise_name: yup.string().required(),
-    exercise_body_part: yup.string().required(),
-  }),
 };
