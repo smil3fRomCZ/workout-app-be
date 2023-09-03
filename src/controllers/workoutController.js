@@ -42,7 +42,7 @@ class WorkoutController {
     try {
       const { workoutId } = req.params;
       const exerciseId = req.body.exercise;
-      const userId = req.session.userId;
+      const { userId } = req.session;
       if (!userId) {
         throw new ApiError("Your are not authorized to add exercise", 401);
       }

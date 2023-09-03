@@ -1,7 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-const { oauth: oauthConfiguration } = require("../config/configuration");
+const { oauth: oauthConfiguration } = require("./configuration");
 const User = require("../models/userModel");
 
 passport.serializeUser((user, done) => {
@@ -19,7 +19,7 @@ passport.use(
       clientSecret: oauthConfiguration.GOOGLE_CLIENT_SECRET,
       callbackURL: oauthConfiguration.GOOGLE_CALLBACK_URL,
     },
-    async function (accessToken, refreshToken, profile, done) {
+    (async (accessToken, refreshToken, profile, done) => {
       const currentUser = await User.findOne({ googleId: profile.id });
 
       if (currentUser) {
@@ -33,7 +33,7 @@ passport.use(
         last_name: profile.name.familyName,
       });
       await newUser.save();
-      done(null, newUser);
-    }
-  )
+      return done(null, newUser);
+    }),
+  ),
 );

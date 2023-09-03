@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const mongoose = require("mongoose");
 
 const ApiError = require("../services/error/apiErrorFormatter");
@@ -55,7 +56,7 @@ class UserController {
           .json({ status: "failed", message: "Wrong credentials" });
       }
       req.session.userId = user._id;
-      res.status(200).json({ status: "success", message: "Login user" });
+      return res.status(200).json({ status: "success", message: "User logged in" });
     } catch (error) {
       next(error);
     }
@@ -78,9 +79,7 @@ class UserController {
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         throw new ApiError("Cast to ObjectId failed", 400);
       }
-      if (req.session.userId !== userId)
-        throw new ApiError("You dont have a permission to do that!", 401);
-
+      if (req.session.userId !== userId) throw new ApiError("You dont have a permission to do that!", 401);
       const updateResult = await UserService.updateUser(userId, userUpdateData);
       if (updateResult > 0) {
         res
@@ -102,8 +101,7 @@ class UserController {
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         throw new ApiError("Cast to ObjectId failed", 400);
       }
-      if (req.session.userId !== userId)
-        throw new ApiError("You dont have a permission to do that!", 401);
+      if (req.session.userId !== userId) throw new ApiError("You dont have a permission to do that!", 401);
       const result = await UserService.deleteUser(userId);
       if (result.deletedCount === 0) {
         res.status(400).json({ status: "failed", message: "Bad request" });

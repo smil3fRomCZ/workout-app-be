@@ -1,7 +1,7 @@
+const workoutRouter = require("express").Router();
+
 const workoutController = require("../controllers/workoutController");
 const userSessionCheck = require("../middleware/sessionAuthentification/sessionAuthentificationCheck");
-
-const workoutRouter = require("express").Router();
 
 workoutRouter
   .route("/")

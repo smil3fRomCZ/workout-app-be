@@ -1,6 +1,6 @@
+const { default: mongoose } = require("mongoose");
 const ExerciseService = require("../services/exercise/ExerciseService");
 const ApiError = require("../services/error/apiErrorFormatter");
-const { default: mongoose } = require("mongoose");
 
 class ExerciseController {
   async getAllExercises(req, res, next) {
@@ -42,7 +42,7 @@ class ExerciseController {
   async deleteExercise(req, res, next) {
     try {
       const { exerciseId } = req.params;
-      const userId = req.session.userId;
+      const { userId } = req.session;
       await ExerciseService.deleteExercise(exerciseId, userId);
       res.status(200).json({ status: "success", message: "Exercise deleted" });
     } catch (error) {
@@ -53,7 +53,7 @@ class ExerciseController {
   async updateExercise(req, res, next) {
     try {
       const { exerciseId } = req.params;
-      const userId = req.session.userId;
+      const { userId } = req.session;
       const newData = req.body;
       await ExerciseService.updateExercise(exerciseId, userId, newData);
       res.status(200).json({ status: "success", message: "Exercise updated" });
