@@ -10,7 +10,7 @@ userRouter
   .get(UserController.getAllUsers)
   .post(
     requestValidator(requestTemplate.registrationRequest),
-    UserController.createUser
+    UserController.createUser,
   );
 
 userRouter
@@ -21,7 +21,7 @@ userRouter
   .route("/login-user")
   .post(
     requestValidator(requestTemplate.loginRequest),
-    UserController.loginUser
+    UserController.loginUser,
   );
 
 userRouter.route("/logout-user").get(UserController.logoutUser);
@@ -36,7 +36,7 @@ userRouter
   .patch(
     userSessionCheck,
     requestValidator(requestTemplate.updateRequest),
-    UserController.updateUser
+    UserController.updateUser,
   )
   .delete(userSessionCheck, UserController.deleteUser);
 

@@ -11,7 +11,7 @@ exerciseRouter
   .post(
     userSessionCheck,
     requestValidator(requestTemplate.createExercise),
-    exerciseController.createExercise
+    exerciseController.createExercise,
   );
 
 exerciseRouter

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const { Schema } = mongoose;
 
 const exerciseSchema = new Schema(
@@ -38,8 +39,11 @@ const exerciseSchema = new Schema(
       type: [Number],
       required: true,
     },
+    exercise_popularity: {
+      type: Number,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Exercise = mongoose.model("Exercise", exerciseSchema);

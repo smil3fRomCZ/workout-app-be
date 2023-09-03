@@ -1,11 +1,14 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable consistent-return */
 const ApiError = require("./apiErrorFormatter");
 
 // List of methods for production
-const duplicateKeyErrorDB = (error) => {
-  const message = `Duplicate field value. Pls use different value`;
+const duplicateKeyErrorDB = () => {
+  const message = "Duplicate field value. Pls use different value";
   return new ApiError(message, 400);
 };
 
+// eslint-disable-next-line consistent-return
 const sendDevelopementError = (err, req, res) => {
   // API Errors
   if (req.originalUrl.startsWith("/api")) {
@@ -40,7 +43,7 @@ const sendProductionError = (err, req, res) => {
   // TODO: render error for PUG templates
 };
 
-module.exports = (err, req, res, next) => {
+module.exports = (err, req, res) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "internal error";
 

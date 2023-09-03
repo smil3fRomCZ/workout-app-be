@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const sendgrid = require("@sendgrid/mail");
 
 const { SENDGRID_API_KEY } = require("../../config/configuration");
